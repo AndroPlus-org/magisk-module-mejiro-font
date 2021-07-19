@@ -9,6 +9,9 @@ Tested on OnePlus 9 Pro (Android 11).
 
 ## Change log
 
+#### v2
+* Fix ExtraBold weight
+
 #### v1
 * Initial Release
 
