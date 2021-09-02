@@ -7,6 +7,13 @@
 MODDIR=${0%/*}
 # This script will be executed in post-fs-data mode
 
+#Link to Roboto
+(cd $MODDIR/system/fonts && ln -s Mejiro-Bold.ttf Roboto-Bold.ttf)
+(cd $MODDIR/system/fonts && ln -s Mejiro-Extrabold.ttf Roboto-Black.ttf)
+(cd $MODDIR/system/fonts && ln -s Mejiro-Light.ttf Roboto-Light.ttf)
+(cd $MODDIR/system/fonts && ln -s Mejiro-Regular.ttf Roboto-Regular.ttf)
+(cd $MODDIR/system/fonts && ln -s Mejiro-Semibold.ttf Roboto-Medium.ttf)
+
 #Copy original fonts.xml to the MODDIR to overwrite dummy file
 cp /system/etc/fonts.xml $MODDIR/system/etc
 
