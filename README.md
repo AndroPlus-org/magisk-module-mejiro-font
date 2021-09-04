@@ -9,6 +9,9 @@ Tested on OnePlus 9 Pro (Android 11).
 
 ## Change log
 
+#### v5
+* Add Thin weight
+
 #### v4
 * Add Roboto override
 
