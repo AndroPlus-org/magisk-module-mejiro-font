@@ -9,6 +9,9 @@ Tested on OnePlus 9 Pro (Android 11).
 
 ## Change log
 
+#### v6
+* Change the way to replace font to fix the issue where some ROMs would give priority to Chinese
+
 #### v5
 * Add Thin weight
 
