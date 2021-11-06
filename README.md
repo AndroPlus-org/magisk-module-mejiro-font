@@ -9,6 +9,9 @@ Tested on OnePlus 9 Pro (Android 11).
 
 ## Change log
 
+#### v7
+* Add Android 12 support
+
 #### v6
 * Change the way to replace font to fix the issue where some ROMs would give priority to Chinese
 
