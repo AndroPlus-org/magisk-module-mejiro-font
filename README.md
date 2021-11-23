@@ -9,6 +9,9 @@ Tested on OnePlus 9 Pro (Android 11).
 
 ## Change log
 
+#### v8
+* Fix Google Sans replacing on Android 12
+
 #### v7
 * Add Android 12 support
 
