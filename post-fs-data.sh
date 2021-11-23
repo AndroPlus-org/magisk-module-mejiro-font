@@ -25,9 +25,21 @@ add_ja() {
 	fi
 }
 
+#Function to replace Google Sans
+replace_gsans() {
+	sed -i 's@GoogleSans-Regular.ttf@Roboto-Variable.ttf@g' $1
+	sed -i 's@GoogleSans-Italic.ttf@Roboto-Variable.ttf\n      <axis tag="ital" stylevalue="1" />@g' $1
+}
+
 #Change fonts.xml file
 remove_ja $MODDIR/system/etc/fonts.xml
 add_ja $MODDIR/system/etc/fonts.xml
+
+gsans=/system/product/etc/fonts_customization.xml
+if [ -e $gsans ]; then
+	cp $gsans $MODDIR$gsans
+	replace_gsans $MODDIR$gsans
+fi
 
 #Goodbye, SomcUDGothic
 sed -i 's@SomcUDGothic-Light.ttf@null.ttf@g' $MODDIR/system/etc/fonts.xml
