@@ -27,8 +27,7 @@ add_ja() {
 
 #Function to replace Google Sans
 replace_gsans() {
-	sed -i 's@GoogleSans-Regular.ttf@Roboto-Variable.ttf@g' $1
-	sed -i 's@GoogleSans-Italic.ttf@Roboto-Variable.ttf\n      <axis tag="ital" stylevalue="1" />@g' $1
+	sed -i 's@GoogleSans-Italic.ttf@GoogleSans-Regular.ttf\n      <axis tag="ital" stylevalue="1" />@g' $1
 }
 
 #Change fonts.xml file
