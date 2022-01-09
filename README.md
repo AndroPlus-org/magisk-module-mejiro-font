@@ -9,6 +9,9 @@ Tested on OnePlus 9 Pro (Android 11) / Google Pixel 6 Pro (Android 12).
 
 ## Change log
 
+#### v10
+* Replace Xiaomi MiSansVF font
+
 #### v9
 * Improve Google Sans replacing on Android 12 (Fix the issue that prevented long press menu, Play Store and system update from opening)
 
