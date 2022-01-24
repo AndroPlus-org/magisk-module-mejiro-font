@@ -51,6 +51,9 @@ sed -i 's@NotoSerif-@Roboto-@g' $MODDIR/system/etc/fonts.xml
 #Goodbye, Xiaomi Font
 sed -i 's@MiSansVF.ttf@Roboto-Regular.ttf@g' $MODDIR/system/etc/fonts.xml
 
+#Goodbye, Sansita Font
+sed -i 's@Sansita-@Roboto-@g' $MODDIR/system/etc/fonts.xml
+
 #Copy fonts_slate.xml for OnePlus
 opslate=fonts_slate.xml
 if [ -e /system/etc/$opslate ]; then
