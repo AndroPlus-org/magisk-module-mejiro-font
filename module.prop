@@ -5,3 +5,4 @@ versionCode=10
 author=AndroPlus
 description=Mejiro font patch for Japanese users.
 donate=https://github.com/sponsors/AndroPlus-org?frequency=one-time
+updateJson=https://github.com/AndroPlus-org/magisk-module-mejiro-font/blob/master/update.json
