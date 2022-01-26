@@ -2,5 +2,5 @@
 	"version": "v11",
 	"versionCode": 11,
 	"zipUrl": "https://github.com/AndroPlus-org/magisk-module-mejiro-font/releases/latest/download/magisk-module-mejiro-font.zip",
-	"changelog": "https://github.com/AndroPlus-org/magisk-module-mejiro-font/releases"
+	"changelog": "https://raw.githubusercontent.com/AndroPlus-org/magisk-module-mejiro-font/master/README.md"
 }
