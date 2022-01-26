@@ -9,6 +9,10 @@ Tested on OnePlus 9 Pro (Android 11) / Google Pixel 6 Pro (Android 12).
 
 ## Change log
 
+#### v11
+* Replace Sansita font
+* Add support for updating from Magisk app
+
 #### v10
 * Replace Xiaomi MiSansVF font
 
