@@ -77,7 +77,7 @@ if [ -e /system/etc/$opslate ]; then
 	sed -i 's@SlateForOnePlus-Black.ttf@Mejiro-Extrabold.ttf@g' $MODDIR/system/etc/$opslate
 fi
 
-#Copy fonts_base.xml for OnePlus OxygenOS 11+
+#Copy fonts_base.xml for OnePlus OxygenOS 11
 oos11=fonts_base.xml
 if [ -e /system/etc/$oos11 ]; then
     cp /system/etc/$oos11 $MODDIR/system/etc
@@ -87,4 +87,16 @@ if [ -e /system/etc/$oos11 ]; then
 	add_ja $MODDIR/system/etc/$oos11
 
 	sed -i 's@NotoSerif-@Roboto-@g' $MODDIR/system/etc/$oos11
+fi
+
+#Copy fonts_base.xml for OnePlus OxygenOS 12+
+oos12=fonts_base.xml
+if [ -e /system/system_ext/etc/$oos12 ]; then
+    cp /system/system_ext/etc/$oos12 $MODDIR/system/system_ext/etc
+	
+	#Change fonts_slate.xml file
+	remove_ja $MODDIR/system/system_ext/etc/$oos12
+	add_ja $MODDIR/system/system_ext/etc/$oos12
+
+	sed -i 's@NotoSerif-@Roboto-@g' $MODDIR/system/system_ext/etc/$oos12
 fi
