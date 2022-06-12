@@ -61,6 +61,22 @@ if [ -e /system/fonts/MiSansVF.ttf ]; then
 	cp /system/fonts/Roboto-Regular.ttf $MODDIR/system/fonts/MiSansVF.ttf
 fi
 
+#Goodbye, vivo Font
+sed -i 's@VivoFont.ttf@Mejiro-Regular.ttf@g' $MODDIR/system/etc/fonts.xml
+sed -i 's@DroidSansFallbackBBK.ttf@Mejiro-Regular.ttf@g' $MODDIR/system/etc/fonts.xml
+if [ -e /system/fonts/HYQiHei-50.ttf ]; then
+cp /system/fonts/Roboto-Regular.ttf $MODDIR/system/fonts/HYQiHei-50.ttf
+fi
+if [ -e /system/fonts/DroidSansFallbackBBK.ttf ]; then
+cp /system/fonts/Roboto-Regular.ttf $MODDIR/system/fonts/DroidSansFallbackBBK.ttf
+fi
+if [ -e /system/fonts/DroidSansFallbackMonster.ttf ]; then
+cp /system/fonts/Roboto-Regular.ttf $MODDIR/system/fonts/DroidSansFallbackMonster.ttf
+fi
+if [ -e /system/fonts/DroidSansFallbackZW.ttf ]; then
+cp /system/fonts/Roboto-Regular.ttf $MODDIR/system/fonts/DroidSansFallbackZW.ttf
+fi
+
 #Goodbye, Sansita Font
 sed -i 's@Sansita-@Roboto-@g' $MODDIR/system/etc/fonts.xml
 
