@@ -60,6 +60,11 @@ sed -i 's@MiSansVF.ttf@Roboto-Regular.ttf@g' $MODDIR/system/etc/fonts.xml
 if [ -e /system/fonts/MiSansVF.ttf ]; then
 	cp /system/fonts/Roboto-Regular.ttf $MODDIR/system/fonts/MiSansVF.ttf
 fi
+#For MIUI 13+
+sed -i 's@MiSansVF_Overlay.ttf@Roboto-Regular.ttf@g' $MODDIR/system/etc/fonts.xml
+if [ -e /system/fonts/MiSansVF_Overlay.ttf ]; then
+	cp /system/fonts/Roboto-Regular.ttf $MODDIR/system/fonts/MiSansVF_Overlay.ttf
+fi
 
 #Goodbye, vivo Font
 sed -i 's@VivoFont.ttf@Mejiro-Regular.ttf@g' $MODDIR/system/etc/fonts.xml
