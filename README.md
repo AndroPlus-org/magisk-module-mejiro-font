@@ -9,6 +9,9 @@ Tested on OnePlus 9 Pro (Android 11) / Google Pixel 6 Pro (Android 12).
 
 ## Change log
 
+#### v15
+* Support MIUI 13
+
 #### v14
 * Replace vivo font
 
