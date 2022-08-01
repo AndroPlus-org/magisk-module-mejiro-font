@@ -10,6 +10,7 @@ MODDIR=${0%/*}
 APILEVEL=$(getprop ro.build.version.sdk)
 
 #Copy original fonts.xml to the MODDIR to overwrite dummy file
+mkdir -p $MODDIR/system/etc $MODDIR/system/system_ext/etc $MODDIR/system/product/etc
 cp /system/etc/fonts.xml $MODDIR/system/etc
 
 #Function to remove original ja
@@ -51,8 +52,16 @@ sed -i 's@OpFont-@Roboto-@g' $MODDIR/system/etc/fonts.xml
 sed -i 's@NotoSerif-@Roboto-@g' $MODDIR/system/etc/fonts.xml
 
 #Goodbye, OPLUS Font
-sed -i 's@SysFont-Regular@Roboto-Regular@g' $MODDIR/system/etc/fonts.xml
-sed -i 's@SysSans-En-Regular@Roboto-Regular@g' $MODDIR/system/etc/fonts.xml
+if [ -f /system/fonts/SysFont-Regular.ttf ]; then
+	cp /system/fonts/Roboto-Regular.ttf $MODDIR/system/fonts/SysFont-Regular.ttf
+fi
+if [ -f /system/fonts/SysFont-Static-Regular.ttf ]; then
+	cp /system/fonts/RobotoStatic-Regular.ttf $MODDIR/system/fonts/SysFont-Static-Regular.ttf
+fi
+if [ -f /system/fonts/SysSans-En-Regular.ttf ]; then
+	sed -i 's@SysSans-En-Regular@Roboto-Regular@g' $MODDIR/system/etc/fonts.xml
+	cp /system/fonts/Roboto-Regular.ttf $MODDIR/system/fonts/SysSans-En-Regular.ttf
+fi
 
 #Goodbye, Xiaomi Font
 /system/bin/sed -i -z 's@<family name="sans-serif">\n    <!-- # MIUI Edit Start -->.*<!-- # MIUI Edit END -->@<family name="sans-serif">@' $MODDIR/system/etc/fonts.xml
@@ -124,5 +133,34 @@ if [ -e /system/system_ext/etc/$oos12 ]; then
 	remove_ja $MODDIR/system/system_ext/etc/$oos12
 	add_ja $MODDIR/system/system_ext/etc/$oos12
 
+	sed -i 's@SysSans-En-Regular@Roboto-Regular@g' $MODDIR/system/system_ext/etc/$oos12
 	sed -i 's@NotoSerif-@Roboto-@g' $MODDIR/system/system_ext/etc/$oos12
+fi
+
+#Copy fonts_customization.xml for OnePlus OxygenOS 12+
+oos12c=fonts_customization.xml
+if [ -e /system/system_ext/etc/$oos12c ]; then
+    cp /system/system_ext/etc/$oos12c $MODDIR/system/system_ext/etc
+	sed -i 's@OplusSansText-25Th@Mejiro-Light@g' $MODDIR/system/system_ext/etc/$oos12c
+	sed -i 's@OplusSansText-35ExLt@Mejiro-Light@g' $MODDIR/system/system_ext/etc/$oos12c
+	sed -i 's@OplusSansText-45Lt@Mejiro-Light@g' $MODDIR/system/system_ext/etc/$oos12c
+	sed -i 's@OplusSansText-55Rg@Mejiro-Regular@g' $MODDIR/system/system_ext/etc/$oos12c
+	sed -i 's@OplusSansText-65Md@Mejiro-Semibold@g' $MODDIR/system/system_ext/etc/$oos12c
+	sed -i 's@NHGMYHOplusHK-W4@Mejiro-Regular@g' $MODDIR/system/system_ext/etc/$oos12c
+	sed -i 's@NHGMYHOplusPRC-W4@Mejiro-Regular@g' $MODDIR/system/system_ext/etc/$oos12c
+	sed -i 's@OplusSansDisplay-45Lt@Mejiro-Light@g' $MODDIR/system/system_ext/etc/$oos12c
+fi
+
+#Copy fonts_customization.xml for OnePlus OxygenOS 12+
+oos12p=fonts_customization.xml
+if [ -e /system/product/etc/$oos12p ]; then
+    cp /system/product/etc/$oos12p $MODDIR/system/product/etc
+	sed -i 's@OplusSansText-25Th@Mejiro-Light@g' $MODDIR/system/product/etc/$oos12p
+	sed -i 's@OplusSansText-35ExLt@Mejiro-Light@g' $MODDIR/system/product/etc/$oos12p
+	sed -i 's@OplusSansText-45Lt@Mejiro-Light@g' $MODDIR/system/product/etc/$oos12p
+	sed -i 's@OplusSansText-55Rg@Mejiro-Regular@g' $MODDIR/system/product/etc/$oos12p
+	sed -i 's@OplusSansText-65Md@Mejiro-Semibold@g' $MODDIR/system/product/etc/$oos12p
+	sed -i 's@NHGMYHOplusHK-W4@Mejiro-Regular@g' $MODDIR/system/product/etc/$oos12p
+	sed -i 's@NHGMYHOplusPRC-W4@Mejiro-Regular@g' $MODDIR/system/product/etc/$oos12p
+	sed -i 's@OplusSansDisplay-45Lt@Mejiro-Light@g' $MODDIR/system/product/etc/$oos12p
 fi
