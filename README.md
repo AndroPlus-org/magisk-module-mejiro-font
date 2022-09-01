@@ -9,6 +9,9 @@ Tested on OnePlus 9 Pro (Android 11) / Google Pixel 6 Pro (Android 12).
 
 ## Change log
 
+#### v17
+* Add a way to disable Extrabold and Thin weights
+
 #### v16
 * Support ColorOS 12.1
 
