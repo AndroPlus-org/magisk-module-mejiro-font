@@ -61,8 +61,7 @@ ui_print "   Vol Up = Yes, Vol Down = No"
 ui_print "極太、極細ウェイトを無効化しますか?"
 ui_print "   音量上 = 無効化、音量下 = 有効化"
 if chooseport; then
-cp -f $MODPATH/system/fonts/Mejiro-Bold.ttf $MODPATH/system/fonts/Mejiro-Extrabold.ttf
-cp -f $MODPATH/system/fonts/Mejiro-Light.ttf $MODPATH/system/fonts/Mejiro-Thin.ttf
+touch $MODPATH/system/fonts/disable-extra-weights
 ui_print "Disabled."
 ui_print "無効化しました。"
 fi
