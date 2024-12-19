@@ -10,7 +10,7 @@ MODDIR=${0%/*}
 APILEVEL=$(getprop ro.build.version.sdk)
 
 #Copy original fonts.xml to the MODDIR to overwrite dummy file
-mkdir -p $MODDIR/system/etc $MODDIR/system/system_ext/etc $MODDIR/system/product/etc
+mkdir -p $MODDIR/system/etc $MODDIR/system/product/etc
 cp /system/etc/fonts.xml $MODDIR/system/etc
 
 #Function to remove original ja
@@ -110,73 +110,4 @@ fi
 #Goodbye, Sansita Font
 sed -i 's@Sansita-@Roboto-@g' $MODDIR/system/etc/fonts.xml
 
-#Copy fonts_slate.xml for OnePlus
-opslate=fonts_slate.xml
-if [ -e /system/etc/$opslate ]; then
-    cp /system/etc/$opslate $MODDIR/system/etc
-	
-	#Change fonts_slate.xml file
-	remove_ja $MODDIR/system/etc/$opslate
-	add_ja $MODDIR/system/etc/$opslate
-
-	sed -i 's@SlateForOnePlus-Thin.ttf@Mejiro-Light.ttf@g' $MODDIR/system/etc/$opslate
-	sed -i 's@SlateForOnePlus-Light.ttf@Mejiro-Light.ttf@g' $MODDIR/system/etc/$opslate
-	sed -i 's@SlateForOnePlus-Book.ttf@Mejiro-Regular.ttf@g' $MODDIR/system/etc/$opslate
-	sed -i 's@SlateForOnePlus-Regular.ttf@Mejiro-Regular.ttf@g' $MODDIR/system/etc/$opslate
-	sed -i 's@SlateForOnePlus-Medium.ttf@Mejiro-Semibold.ttf@g' $MODDIR/system/etc/$opslate
-	sed -i 's@SlateForOnePlus-Bold.ttf@Mejiro-Bold.ttf@g' $MODDIR/system/etc/$opslate
-	sed -i 's@SlateForOnePlus-Black.ttf@Mejiro-Extrabold.ttf@g' $MODDIR/system/etc/$opslate
-fi
-
-#Copy fonts_base.xml for OnePlus OxygenOS 11
-oos11=fonts_base.xml
-if [ -e /system/etc/$oos11 ]; then
-    cp /system/etc/$oos11 $MODDIR/system/etc
-	
-	#Change fonts_slate.xml file
-	remove_ja $MODDIR/system/etc/$oos11
-	add_ja $MODDIR/system/etc/$oos11
-
-	sed -i 's@NotoSerif-@Roboto-@g' $MODDIR/system/etc/$oos11
-fi
-
-#Copy fonts_base.xml for OnePlus OxygenOS 12+
-oos12=fonts_base.xml
-if [ -e /system/system_ext/etc/$oos12 ]; then
-    cp /system/system_ext/etc/$oos12 $MODDIR/system/system_ext/etc
-	
-	#Change fonts_slate.xml file
-	remove_ja $MODDIR/system/system_ext/etc/$oos12
-	add_ja $MODDIR/system/system_ext/etc/$oos12
-
-	sed -i 's@SysSans-En-Regular@Roboto-Regular@g' $MODDIR/system/system_ext/etc/$oos12
-	sed -i 's@NotoSerif-@Roboto-@g' $MODDIR/system/system_ext/etc/$oos12
-fi
-
-#Copy fonts_customization.xml for OnePlus OxygenOS 12+
-oos12c=fonts_customization.xml
-if [ -e /system/system_ext/etc/$oos12c ]; then
-    cp /system/system_ext/etc/$oos12c $MODDIR/system/system_ext/etc
-	sed -i 's@OplusSansText-25Th@Mejiro-Light@g' $MODDIR/system/system_ext/etc/$oos12c
-	sed -i 's@OplusSansText-35ExLt@Mejiro-Light@g' $MODDIR/system/system_ext/etc/$oos12c
-	sed -i 's@OplusSansText-45Lt@Mejiro-Light@g' $MODDIR/system/system_ext/etc/$oos12c
-	sed -i 's@OplusSansText-55Rg@Mejiro-Regular@g' $MODDIR/system/system_ext/etc/$oos12c
-	sed -i 's@OplusSansText-65Md@Mejiro-Semibold@g' $MODDIR/system/system_ext/etc/$oos12c
-	sed -i 's@NHGMYHOplusHK-W4@Mejiro-Regular@g' $MODDIR/system/system_ext/etc/$oos12c
-	sed -i 's@NHGMYHOplusPRC-W4@Mejiro-Regular@g' $MODDIR/system/system_ext/etc/$oos12c
-	sed -i 's@OplusSansDisplay-45Lt@Mejiro-Light@g' $MODDIR/system/system_ext/etc/$oos12c
-fi
-
-#Copy fonts_customization.xml for OnePlus OxygenOS 12+
-oos12p=fonts_customization.xml
-if [ -e /system/product/etc/$oos12p ]; then
-    cp /system/product/etc/$oos12p $MODDIR/system/product/etc
-	sed -i 's@OplusSansText-25Th@Mejiro-Light@g' $MODDIR/system/product/etc/$oos12p
-	sed -i 's@OplusSansText-35ExLt@Mejiro-Light@g' $MODDIR/system/product/etc/$oos12p
-	sed -i 's@OplusSansText-45Lt@Mejiro-Light@g' $MODDIR/system/product/etc/$oos12p
-	sed -i 's@OplusSansText-55Rg@Mejiro-Regular@g' $MODDIR/system/product/etc/$oos12p
-	sed -i 's@OplusSansText-65Md@Mejiro-Semibold@g' $MODDIR/system/product/etc/$oos12p
-	sed -i 's@NHGMYHOplusHK-W4@Mejiro-Regular@g' $MODDIR/system/product/etc/$oos12p
-	sed -i 's@NHGMYHOplusPRC-W4@Mejiro-Regular@g' $MODDIR/system/product/etc/$oos12p
-	sed -i 's@OplusSansDisplay-45Lt@Mejiro-Light@g' $MODDIR/system/product/etc/$oos12p
-fi
+cp $MODDIR/system/etc/fonts.xml $MODDIR/system/etc/font_fallback.xml
