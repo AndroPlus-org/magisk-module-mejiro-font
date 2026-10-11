@@ -9,32 +9,45 @@ MODDIR=${0%/*}
 
 APILEVEL=$(getprop ro.build.version.sdk)
 
-#Copy original fonts.xml to the MODDIR to overwrite dummy file
-mkdir -p $MODDIR/system/etc $MODDIR/system/system_ext/etc $MODDIR/system/product/etc
-cp /system/etc/fonts.xml $MODDIR/system/etc
+#Mejiro variable font (wght 100-800)
+FONT=Mejiro-VF.ttf
+
+if [ -e $MODDIR/system/fonts/disable-extra-weights ] ; then
+	WEIGHTS="300 400 500 600 700"
+else
+	WEIGHTS="100 200 300 400 500 600 700 800"
+fi
+
+#Font file name with wght axis (for replacing static fonts)
+mejiro() {
+	echo "$FONT<axis tag=\"wght\" stylevalue=\"$1\" />"
+}
+
+#Font entries of ja family
+ja_fonts() {
+	local fallback=$1
+	local attr=""
+	if [ $APILEVEL -ge 31 ] ; then
+		#Android 12 and later
+		attr=" postScriptName=\"NotoSansCJKjp-Regular\""
+	fi
+	if [ -n "$fallback" ] ; then
+		attr="$attr fallbackFor=\"$fallback\""
+	fi
+	for w in $WEIGHTS ; do
+		printf '        <font weight="%s" style="normal"%s>%s</font>\\n' $w "$attr" "$(mejiro $w)"
+	done
+}
 
 #Function to remove original ja
 remove_ja() {
-  sed -i -e '/<family lang="ja"/,/<\/family>/d' $1
+	sed -i -e '/<family lang="ja"/,/<\/family>/d' $1
 }
 
 #Function to add ja above zh-Hans
 add_ja() {
-	if [ -e $MODDIR/system/fonts/disable-extra-weights ] ; then
-		if [ $APILEVEL -ge 31 ] ; then
-			#Android 12 and later
-			sed -i 's@<family lang="zh-Hans">@<family lang="ja">\n        <font weight="300" style="normal" postScriptName="NotoSansCJKjp-Regular">Mejiro-Light.ttf</font>\n        <font weight="400" style="normal" postScriptName="NotoSansCJKjp-Regular">Mejiro-Regular.ttf</font>\n        <font weight="600" style="normal" postScriptName="NotoSansCJKjp-Regular">Mejiro-Semibold.ttf</font>\n        <font weight="700" style="normal" postScriptName="NotoSansCJKjp-Regular">Mejiro-Bold.ttf</font>\n        <font weight="300" style="normal" postScriptName="NotoSansCJKjp-Regular" fallbackFor="serif">Mejiro-Light.ttf</font>\n        <font weight="400" style="normal" postScriptName="NotoSansCJKjp-Regular" fallbackFor="serif">Mejiro-Regular.ttf</font>\n        <font weight="600" style="normal" postScriptName="NotoSansCJKjp-Regular" fallbackFor="serif">Mejiro-Semibold.ttf</font>\n        <font weight="700" style="normal" postScriptName="NotoSansCJKjp-Regular" fallbackFor="serif">Mejiro-Bold.ttf</font>\n    </family>\n    <family lang="zh-Hans">@g' $1
-		else
-			sed -i 's@<family lang="zh-Hans">@<family lang="ja">\n        <font weight="300" style="normal">Mejiro-Light.ttf</font>\n        <font weight="400" style="normal">Mejiro-Regular.ttf</font>\n        <font weight="600" style="normal">Mejiro-Semibold.ttf</font>\n        <font weight="700" style="normal">Mejiro-Bold.ttf</font>\n        <font weight="300" style="normal" fallbackFor="serif">Mejiro-Light.ttf</font>\n        <font weight="400" style="normal" fallbackFor="serif">Mejiro-Regular.ttf</font>\n        <font weight="600" style="normal" fallbackFor="serif">Mejiro-Semibold.ttf</font>\n        <font weight="700" style="normal" fallbackFor="serif">Mejiro-Bold.ttf</font>\n    </family>\n    <family lang="zh-Hans">@g' $1
-		fi
-	else
-		if [ $APILEVEL -ge 31 ] ; then
-			#Android 12 and later
-			sed -i 's@<family lang="zh-Hans">@<family lang="ja">\n        <font weight="100" style="normal" postScriptName="NotoSansCJKjp-Regular">Mejiro-Thin.ttf</font>\n        <font weight="300" style="normal" postScriptName="NotoSansCJKjp-Regular">Mejiro-Light.ttf</font>\n        <font weight="400" style="normal" postScriptName="NotoSansCJKjp-Regular">Mejiro-Regular.ttf</font>\n        <font weight="600" style="normal" postScriptName="NotoSansCJKjp-Regular">Mejiro-Semibold.ttf</font>\n        <font weight="700" style="normal" postScriptName="NotoSansCJKjp-Regular">Mejiro-Bold.ttf</font>\n        <font weight="800" style="normal" postScriptName="NotoSansCJKjp-Regular">Mejiro-Extrabold.ttf</font>\n        <font weight="100" style="normal" postScriptName="NotoSansCJKjp-Regular" fallbackFor="serif">Mejiro-Thin.ttf</font>\n        <font weight="300" style="normal" postScriptName="NotoSansCJKjp-Regular" fallbackFor="serif">Mejiro-Light.ttf</font>\n        <font weight="400" style="normal" postScriptName="NotoSansCJKjp-Regular" fallbackFor="serif">Mejiro-Regular.ttf</font>\n        <font weight="600" style="normal" postScriptName="NotoSansCJKjp-Regular" fallbackFor="serif">Mejiro-Semibold.ttf</font>\n        <font weight="700" style="normal" postScriptName="NotoSansCJKjp-Regular" fallbackFor="serif">Mejiro-Bold.ttf</font>\n        <font weight="800" style="normal" postScriptName="NotoSansCJKjp-Regular" fallbackFor="serif">Mejiro-Extrabold.ttf</font>\n    </family>\n    <family lang="zh-Hans">@g' $1
-		else
-			sed -i 's@<family lang="zh-Hans">@<family lang="ja">\n        <font weight="100" style="normal">Mejiro-Thin.ttf</font>\n        <font weight="300" style="normal">Mejiro-Light.ttf</font>\n        <font weight="400" style="normal">Mejiro-Regular.ttf</font>\n        <font weight="600" style="normal">Mejiro-Semibold.ttf</font>\n        <font weight="700" style="normal">Mejiro-Bold.ttf</font>\n        <font weight="800" style="normal">Mejiro-Extrabold.ttf</font>\n        <font weight="100" style="normal" fallbackFor="serif">Mejiro-Thin.ttf</font>\n        <font weight="300" style="normal" fallbackFor="serif">Mejiro-Light.ttf</font>\n        <font weight="400" style="normal" fallbackFor="serif">Mejiro-Regular.ttf</font>\n        <font weight="600" style="normal" fallbackFor="serif">Mejiro-Semibold.ttf</font>\n        <font weight="700" style="normal" fallbackFor="serif">Mejiro-Bold.ttf</font>\n        <font weight="800" style="normal" fallbackFor="serif">Mejiro-Extrabold.ttf</font>\n    </family>\n    <family lang="zh-Hans">@g' $1
-		fi
-	fi
+	local ja="<family lang=\"ja\">\\n$(ja_fonts)$(ja_fonts serif)    </family>\\n    <family lang=\"zh-Hans\""
+	sed -i "s@<family lang=\"zh-Hans\"@$ja@g" $1
 }
 
 #Function to replace Google Sans
@@ -42,23 +55,58 @@ replace_gsans() {
 	sed -i 's@GoogleSans-Italic.ttf@GoogleSans-Regular.ttf\n      <axis tag="ital" stylevalue="1" />@g' $1
 }
 
-#Change fonts.xml file
-remove_ja $MODDIR/system/etc/fonts.xml
-add_ja $MODDIR/system/etc/fonts.xml
+#Change fonts.xml / font_fallback.xml
+patch_fonts_xml() {
+	local xml=$1
+
+	remove_ja $xml
+	add_ja $xml
+
+	#Goodbye, SomcUDGothic
+	sed -i 's@SomcUDGothic-Light.ttf@null.ttf@g' $xml
+	sed -i 's@SomcUDGothic-Regular.ttf@null.ttf@g' $xml
+
+	#Goodbye, OnePlus Font
+	sed -i 's@OpFont-@Roboto-@g' $xml
+	sed -i 's@NotoSerif-@Roboto-@g' $xml
+
+	#Goodbye, OPLUS Font
+	if [ -f /system/fonts/SysSans-En-Regular.ttf ]; then
+		sed -i 's@SysSans-En-Regular@Roboto-Regular@g' $xml
+	fi
+
+	#Goodbye, Xiaomi Font
+	/system/bin/sed -i -z 's@<family name="sans-serif">\n    <!-- # MIUI Edit Start -->.*<!-- # MIUI Edit END -->@<family name="sans-serif">@' $xml
+	sed -i 's@MiSansVF.ttf@Roboto-Regular.ttf@g' $xml
+	#For MIUI 13+
+	sed -i 's@MiSansVF_Overlay.ttf@Roboto-Regular.ttf@g' $xml
+
+	#Goodbye, vivo Font
+	sed -i "s@VivoFont.ttf@$FONT@g" $xml
+	sed -i "s@DroidSansFallbackBBK.ttf@$FONT@g" $xml
+
+	#Goodbye, Sansita Font
+	sed -i 's@Sansita-@Roboto-@g' $xml
+}
+
+mkdir -p $MODDIR/system/etc $MODDIR/system/system_ext/etc $MODDIR/system/product/etc
+
+#Copy original fonts.xml to the MODDIR to overwrite dummy file
+cp /system/etc/fonts.xml $MODDIR/system/etc
+patch_fonts_xml $MODDIR/system/etc/fonts.xml
+
+#Android 15 and later read font_fallback.xml instead of fonts.xml.
+#Patch the original one because fonts.xml may lack the latest font settings.
+if [ -e /system/etc/font_fallback.xml ]; then
+	cp /system/etc/font_fallback.xml $MODDIR/system/etc
+	patch_fonts_xml $MODDIR/system/etc/font_fallback.xml
+fi
 
 gsans=/system/product/etc/fonts_customization.xml
 if [ -e $gsans ]; then
 	cp $gsans $MODDIR$gsans
 	replace_gsans $MODDIR$gsans
 fi
-
-#Goodbye, SomcUDGothic
-sed -i 's@SomcUDGothic-Light.ttf@null.ttf@g' $MODDIR/system/etc/fonts.xml
-sed -i 's@SomcUDGothic-Regular.ttf@null.ttf@g' $MODDIR/system/etc/fonts.xml
-
-#Goodbye, OnePlus Font
-sed -i 's@OpFont-@Roboto-@g' $MODDIR/system/etc/fonts.xml
-sed -i 's@NotoSerif-@Roboto-@g' $MODDIR/system/etc/fonts.xml
 
 #Goodbye, OPLUS Font
 if [ -f /system/fonts/SysFont-Regular.ttf ]; then
@@ -68,18 +116,14 @@ if [ -f /system/fonts/SysFont-Static-Regular.ttf ]; then
 	cp /system/fonts/RobotoStatic-Regular.ttf $MODDIR/system/fonts/SysFont-Static-Regular.ttf
 fi
 if [ -f /system/fonts/SysSans-En-Regular.ttf ]; then
-	sed -i 's@SysSans-En-Regular@Roboto-Regular@g' $MODDIR/system/etc/fonts.xml
 	cp /system/fonts/Roboto-Regular.ttf $MODDIR/system/fonts/SysSans-En-Regular.ttf
 fi
 
 #Goodbye, Xiaomi Font
-/system/bin/sed -i -z 's@<family name="sans-serif">\n    <!-- # MIUI Edit Start -->.*<!-- # MIUI Edit END -->@<family name="sans-serif">@' $MODDIR/system/etc/fonts.xml
-sed -i 's@MiSansVF.ttf@Roboto-Regular.ttf@g' $MODDIR/system/etc/fonts.xml
 if [ -e /system/fonts/MiSansVF.ttf ]; then
 	cp /system/fonts/Roboto-Regular.ttf $MODDIR/system/fonts/MiSansVF.ttf
 fi
 #For MIUI 13+
-sed -i 's@MiSansVF_Overlay.ttf@Roboto-Regular.ttf@g' $MODDIR/system/etc/fonts.xml
 if [ -e /system/fonts/MiSansVF_Overlay.ttf ]; then
 	cp /system/fonts/Roboto-Regular.ttf $MODDIR/system/fonts/MiSansVF_Overlay.ttf
 fi
@@ -92,8 +136,6 @@ if [ -e /system/product/fonts/MiSansTCVF.ttf ]; then
 fi
 
 #Goodbye, vivo Font
-sed -i 's@VivoFont.ttf@Mejiro-Regular.ttf@g' $MODDIR/system/etc/fonts.xml
-sed -i 's@DroidSansFallbackBBK.ttf@Mejiro-Regular.ttf@g' $MODDIR/system/etc/fonts.xml
 if [ -e /system/fonts/HYQiHei-50.ttf ]; then
 cp /system/fonts/Roboto-Regular.ttf $MODDIR/system/fonts/HYQiHei-50.ttf
 fi
@@ -107,33 +149,30 @@ if [ -e /system/fonts/DroidSansFallbackZW.ttf ]; then
 cp /system/fonts/Roboto-Regular.ttf $MODDIR/system/fonts/DroidSansFallbackZW.ttf
 fi
 
-#Goodbye, Sansita Font
-sed -i 's@Sansita-@Roboto-@g' $MODDIR/system/etc/fonts.xml
-
 #Copy fonts_slate.xml for OnePlus
 opslate=fonts_slate.xml
 if [ -e /system/etc/$opslate ]; then
     cp /system/etc/$opslate $MODDIR/system/etc
-	
+
 	#Change fonts_slate.xml file
 	remove_ja $MODDIR/system/etc/$opslate
 	add_ja $MODDIR/system/etc/$opslate
 
-	sed -i 's@SlateForOnePlus-Thin.ttf@Mejiro-Light.ttf@g' $MODDIR/system/etc/$opslate
-	sed -i 's@SlateForOnePlus-Light.ttf@Mejiro-Light.ttf@g' $MODDIR/system/etc/$opslate
-	sed -i 's@SlateForOnePlus-Book.ttf@Mejiro-Regular.ttf@g' $MODDIR/system/etc/$opslate
-	sed -i 's@SlateForOnePlus-Regular.ttf@Mejiro-Regular.ttf@g' $MODDIR/system/etc/$opslate
-	sed -i 's@SlateForOnePlus-Medium.ttf@Mejiro-Semibold.ttf@g' $MODDIR/system/etc/$opslate
-	sed -i 's@SlateForOnePlus-Bold.ttf@Mejiro-Bold.ttf@g' $MODDIR/system/etc/$opslate
-	sed -i 's@SlateForOnePlus-Black.ttf@Mejiro-Extrabold.ttf@g' $MODDIR/system/etc/$opslate
+	sed -i "s@SlateForOnePlus-Thin.ttf@$(mejiro 300)@g" $MODDIR/system/etc/$opslate
+	sed -i "s@SlateForOnePlus-Light.ttf@$(mejiro 300)@g" $MODDIR/system/etc/$opslate
+	sed -i "s@SlateForOnePlus-Book.ttf@$(mejiro 400)@g" $MODDIR/system/etc/$opslate
+	sed -i "s@SlateForOnePlus-Regular.ttf@$(mejiro 400)@g" $MODDIR/system/etc/$opslate
+	sed -i "s@SlateForOnePlus-Medium.ttf@$(mejiro 500)@g" $MODDIR/system/etc/$opslate
+	sed -i "s@SlateForOnePlus-Bold.ttf@$(mejiro 700)@g" $MODDIR/system/etc/$opslate
+	sed -i "s@SlateForOnePlus-Black.ttf@$(mejiro 800)@g" $MODDIR/system/etc/$opslate
 fi
 
 #Copy fonts_base.xml for OnePlus OxygenOS 11
 oos11=fonts_base.xml
 if [ -e /system/etc/$oos11 ]; then
     cp /system/etc/$oos11 $MODDIR/system/etc
-	
-	#Change fonts_slate.xml file
+
+	#Change fonts_base.xml file
 	remove_ja $MODDIR/system/etc/$oos11
 	add_ja $MODDIR/system/etc/$oos11
 
@@ -144,8 +183,8 @@ fi
 oos12=fonts_base.xml
 if [ -e /system/system_ext/etc/$oos12 ]; then
     cp /system/system_ext/etc/$oos12 $MODDIR/system/system_ext/etc
-	
-	#Change fonts_slate.xml file
+
+	#Change fonts_base.xml file
 	remove_ja $MODDIR/system/system_ext/etc/$oos12
 	add_ja $MODDIR/system/system_ext/etc/$oos12
 
@@ -153,32 +192,41 @@ if [ -e /system/system_ext/etc/$oos12 ]; then
 	sed -i 's@NotoSerif-@Roboto-@g' $MODDIR/system/system_ext/etc/$oos12
 fi
 
+#Function to replace OPLUS fonts in fonts_customization.xml
+replace_oplus() {
+	local xml=$1
+	#File names (with wght axis)
+	sed -i "s@OplusSansText-25Th.ttf@$(mejiro 300)@g" $xml
+	sed -i "s@OplusSansText-35ExLt.ttf@$(mejiro 300)@g" $xml
+	sed -i "s@OplusSansText-45Lt.ttf@$(mejiro 300)@g" $xml
+	sed -i "s@OplusSansText-55Rg.ttf@$(mejiro 400)@g" $xml
+	sed -i "s@OplusSansText-65Md.ttf@$(mejiro 600)@g" $xml
+	sed -i "s@NHGMYHOplusHK-W4.ttf@$(mejiro 400)@g" $xml
+	sed -i "s@NHGMYHOplusPRC-W4.ttf@$(mejiro 400)@g" $xml
+	sed -i "s@OplusSansDisplay-45Lt.ttf@$(mejiro 300)@g" $xml
+	#Other references (e.g. postScriptName)
+	sed -i 's@OplusSansText-25Th@Mejiro-Light@g' $xml
+	sed -i 's@OplusSansText-35ExLt@Mejiro-Light@g' $xml
+	sed -i 's@OplusSansText-45Lt@Mejiro-Light@g' $xml
+	sed -i 's@OplusSansText-55Rg@Mejiro-Regular@g' $xml
+	sed -i 's@OplusSansText-65Md@Mejiro-Semibold@g' $xml
+	sed -i 's@NHGMYHOplusHK-W4@Mejiro-Regular@g' $xml
+	sed -i 's@NHGMYHOplusPRC-W4@Mejiro-Regular@g' $xml
+	sed -i 's@OplusSansDisplay-45Lt@Mejiro-Light@g' $xml
+}
+
 #Copy fonts_customization.xml for OnePlus OxygenOS 12+
 oos12c=fonts_customization.xml
 if [ -e /system/system_ext/etc/$oos12c ]; then
     cp /system/system_ext/etc/$oos12c $MODDIR/system/system_ext/etc
-	sed -i 's@OplusSansText-25Th@Mejiro-Light@g' $MODDIR/system/system_ext/etc/$oos12c
-	sed -i 's@OplusSansText-35ExLt@Mejiro-Light@g' $MODDIR/system/system_ext/etc/$oos12c
-	sed -i 's@OplusSansText-45Lt@Mejiro-Light@g' $MODDIR/system/system_ext/etc/$oos12c
-	sed -i 's@OplusSansText-55Rg@Mejiro-Regular@g' $MODDIR/system/system_ext/etc/$oos12c
-	sed -i 's@OplusSansText-65Md@Mejiro-Semibold@g' $MODDIR/system/system_ext/etc/$oos12c
-	sed -i 's@NHGMYHOplusHK-W4@Mejiro-Regular@g' $MODDIR/system/system_ext/etc/$oos12c
-	sed -i 's@NHGMYHOplusPRC-W4@Mejiro-Regular@g' $MODDIR/system/system_ext/etc/$oos12c
-	sed -i 's@OplusSansDisplay-45Lt@Mejiro-Light@g' $MODDIR/system/system_ext/etc/$oos12c
+	replace_oplus $MODDIR/system/system_ext/etc/$oos12c
 fi
 
 #Copy fonts_customization.xml for OnePlus OxygenOS 12+
 oos12p=fonts_customization.xml
 if [ -e /system/product/etc/$oos12p ]; then
-    cp /system/product/etc/$oos12p $MODDIR/system/product/etc
-	sed -i 's@OplusSansText-25Th@Mejiro-Light@g' $MODDIR/system/product/etc/$oos12p
-	sed -i 's@OplusSansText-35ExLt@Mejiro-Light@g' $MODDIR/system/product/etc/$oos12p
-	sed -i 's@OplusSansText-45Lt@Mejiro-Light@g' $MODDIR/system/product/etc/$oos12p
-	sed -i 's@OplusSansText-55Rg@Mejiro-Regular@g' $MODDIR/system/product/etc/$oos12p
-	sed -i 's@OplusSansText-65Md@Mejiro-Semibold@g' $MODDIR/system/product/etc/$oos12p
-	sed -i 's@NHGMYHOplusHK-W4@Mejiro-Regular@g' $MODDIR/system/product/etc/$oos12p
-	sed -i 's@NHGMYHOplusPRC-W4@Mejiro-Regular@g' $MODDIR/system/product/etc/$oos12p
-	sed -i 's@OplusSansDisplay-45Lt@Mejiro-Light@g' $MODDIR/system/product/etc/$oos12p
+	if [ ! -e $MODDIR/system/product/etc/$oos12p ]; then
+		cp /system/product/etc/$oos12p $MODDIR/system/product/etc
+	fi
+	replace_oplus $MODDIR/system/product/etc/$oos12p
 fi
-
-cp $MODDIR/system/etc/fonts.xml $MODDIR/system/etc/font_fallback.xml

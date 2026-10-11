@@ -3,6 +3,12 @@
 Mejiro font patch for Japanese users.
 Tested on OnePlus 9 Pro (Android 11) / Google Pixel 6 Pro (Android 12).
 
+#### Changelog
+
+v24
+* Use variable font (`Mejiro-VF.ttf`, wght 100-800) instead of static fonts
+* Android 15+: patch the original `font_fallback.xml` instead of overwriting it with `fonts.xml` (fix crash on Android 16 / 17)
+
 #### NOTICE
 
 * You should use latest Magisk Manager to install this module. If you meet any problem under installation from Magisk Manager, please try to install it from recovery.
@@ -10,6 +16,7 @@ Tested on OnePlus 9 Pro (Android 11) / Google Pixel 6 Pro (Android 12).
 ## License
 
 - This module is licensed under [WTFPL](http://www.wtfpl.net/).
+- `Mejiro-VF.ttf` is licensed under the SIL Open Font License 1.1. See [LICENSES/OFL.txt](LICENSES/OFL.txt).
 
 ```
             DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
